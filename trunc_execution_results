@@ -1,0 +1,12 @@
+./trunc
+Please enter a float value (Type 'quit' to Quit):           quit
+shyamg@shyamg-t5600 week2$ ./trunc
+Please enter a float value (Type 'quit' to Quit):           asdf
+2019/03/11 00:08:24 Could not convert [asdf] to float!
+Please enter a float value (Type 'quit' to Quit):           1234.9876
+Float Value:                                                1234.987549
+Truncated Integer:                                          1234
+Please enter a float value (Type 'quit' to Quit):           56789.1234
+Float Value:                                                56789.125000
+Truncated Integer:                                          56789
+Please enter a float value (Type 'quit' to Quit):           quit
