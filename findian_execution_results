@@ -1,0 +1,23 @@
+./findian 
+Please enter a string value (Type 'quit' to Quit):          ian
+Found!                                                      
+
+Please enter a string value (Type 'quit' to Quit):          Ian
+Found!                                                      
+
+Please enter a string value (Type 'quit' to Quit):          iuiygaygn
+Found!                                                      
+
+Please enter a string value (Type 'quit' to Quit):          I d skd a efju N
+Found!                                                      
+
+Please enter a string value (Type 'quit' to Quit):          ihhhhhn
+Not Found!                                                  
+
+Please enter a string value (Type 'quit' to Quit):          ina
+Not Found!                                                  
+
+Please enter a string value (Type 'quit' to Quit):          xian
+Not Found!                                                  
+
+Please enter a string value (Type 'quit' to Quit):          quit
