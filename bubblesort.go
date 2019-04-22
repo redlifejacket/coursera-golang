@@ -46,6 +46,7 @@ const (
 	ShowStringValue
 	RegexFound
 	RegexNotFound
+	MaxIntegerCount
 )
 
 func GetUserPromptPadded(up UserPrompt, str string, strFmt string) string {
@@ -65,6 +66,8 @@ func GetUserPrompt(up UserPrompt) string {
 		strReturnVal = GetUserPromptPadded(up, "Valid Input!", "")
 	case RegexNotFound:
 		strReturnVal = GetUserPromptPadded(up, "Invalid Input!", "")
+	case MaxIntegerCount:
+		strReturnVal = GetUserPromptPadded(up, "Reached maximum integer count", "")
 	}
 	return strReturnVal
 }
@@ -80,7 +83,7 @@ func BubbleSort(numbers []int) {
 	for Swapped {
 		Swapped = false
 		for i := 0; i < len(numbers)-1; i++ {
-			if numbers[i+1] < numbers[i] {
+			if numbers[i] > numbers[i+1] {
 				Swap(numbers, i)
 				Swapped = true
 			}
@@ -89,9 +92,8 @@ func BubbleSort(numbers []int) {
 }
 
 func main() {
-	var intSlice = make([]int, ListSize)
-
-	re := regexp.MustCompile(`^\d+$`)
+	var intSlice = make([]int, 0)
+	re := regexp.MustCompile(`(-?[\d]+)`)
 	scanner := bufio.NewScanner(os.Stdin)
 	if err := scanner.Err(); err != nil {
 		log.Println(err)
@@ -100,7 +102,11 @@ func main() {
 	intCount := 0
 	for scanner.Scan() {
 		var strVal string = scanner.Text()
-		if strVal == QuitCode || intCount == ListSize {
+		if strVal == QuitCode {
+			os.Exit(0)
+		}
+		if intCount == ListSize {
+			println(GetUserPrompt(MaxIntegerCount))
 			os.Exit(0)
 		}
 		match := re.Match([]byte(strVal))
@@ -112,8 +118,7 @@ func main() {
 		}
 		intSlice = append(intSlice, intVal)
 		BubbleSort(intSlice)
-		var result []int = intSlice[ListSize:len(intSlice)]
-		fmt.Println(result)
+		fmt.Println(intSlice)
 		fmt.Printf(GetUserPrompt(ReadStringValue))
 		intCount += 1
 	}
