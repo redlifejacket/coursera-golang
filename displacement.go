@@ -102,6 +102,7 @@ func readUserInput(prompt UserPrompt, regex string) (float64, error) {
 		if match == true && err == nil {
 			return inputVal, err
 		}
+		fmt.Println(GetUserPrompt(RegexNotFound))
 		fmt.Printf(GetUserPrompt(prompt))
 	}
 	return inputVal, err
