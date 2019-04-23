@@ -110,7 +110,7 @@ func readUserInput(prompt UserPrompt, regex string) (float64, error) {
 
 func GenDisplaceFn(a, v0, s0 float64) func(float64) float64 {
 	fn := func(t float64) float64 {
-		return (a*(math.Pow(t, 2)) + (v0 * t) + (s0))
+		return (a*(math.Pow(t, 2)*0.5) + (v0 * t) + (s0))
 	}
 	return fn
 }
