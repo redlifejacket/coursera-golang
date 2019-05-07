@@ -1,5 +1,5 @@
 /*
- * Author: Shyam Govardhan (22 April 2019)
+ * Author: Shyam Govardhan (7 May 2019)
  * Coursera Getting Started with Go (UCI)
  * Write a Bubble Sort program in Go.
  * The program should prompt the user to type in a sequence of up to 10 integers.
@@ -33,44 +33,10 @@ import (
 	"strings"
 )
 
-type UserPrompt int
-
 const (
 	ListSize            int    = 10
-	MaxUserPromptLength int    = 40
 	QuitCode            string = "X"
 )
-
-const (
-	ReadStringValue UserPrompt = iota
-	ShowStringValue
-	RegexFound
-	RegexNotFound
-	MaxIntegerCount
-)
-
-func GetUserPromptPadded(up UserPrompt, str string, strFmt string) string {
-	var paddedStr = str + strings.Repeat(" ", (MaxUserPromptLength-len(str))) + strFmt
-	if !(up == ReadStringValue) {
-		paddedStr = paddedStr + "\n"
-	}
-	return paddedStr
-}
-
-func GetUserPrompt(up UserPrompt) string {
-	var strReturnVal string
-	switch up {
-	case ReadStringValue:
-		strReturnVal = GetUserPromptPadded(up, "Please enter an integer ('X' to Exit):", "")
-	case RegexFound:
-		strReturnVal = GetUserPromptPadded(up, "Valid Input!", "")
-	case RegexNotFound:
-		strReturnVal = GetUserPromptPadded(up, "Invalid Input!", "")
-	case MaxIntegerCount:
-		strReturnVal = GetUserPromptPadded(up, "Reached maximum integer count", "")
-	}
-	return strReturnVal
-}
 
 func Swap(numbers []int, i int) {
 	tmp := numbers[i]
@@ -91,35 +57,48 @@ func BubbleSort(numbers []int) {
 	}
 }
 
+// https://stackoverflow.com/questions/37290693/how-to-remove-redundant-spaces-whitespace-from-a-string-in-golang
+func stripSpaces(input string) string {
+	re_leadclose_whtsp := regexp.MustCompile(`^[\s\p{Zs}]+|[\s\p{Zs}]+$`)
+	re_inside_whtsp := regexp.MustCompile(`[\s\p{Zs}]{2,}`)
+	result := re_leadclose_whtsp.ReplaceAllString(input, "")
+	result = re_inside_whtsp.ReplaceAllString(result, " ")
+	return result
+}
+
 func main() {
-	var intSlice = make([]int, 0)
-	re := regexp.MustCompile(`(-?[\d]+)`)
 	scanner := bufio.NewScanner(os.Stdin)
 	if err := scanner.Err(); err != nil {
 		log.Println(err)
 	}
-	fmt.Printf(GetUserPrompt(ReadStringValue))
-	intCount := 0
-	for scanner.Scan() {
+	fmt.Println("Enter X to exit...")
+	fmt.Printf("Please enter a list of integers (space-separated): ")
+
+	for (scanner.Scan()) {
 		var strVal string = scanner.Text()
 		if strVal == QuitCode {
 			os.Exit(0)
 		}
-		if intCount == ListSize {
-			println(GetUserPrompt(MaxIntegerCount))
-			os.Exit(0)
+		strVal = stripSpaces(strVal)
+		var numlist = strings.Split(strVal, " ")
+		var intSlice = make([]int, 0)
+		for _, i := range numlist {
+			j, err := strconv.Atoi(i)
+			if err != nil {
+				fmt.Println("Invalid input! Please try again...")
+				fmt.Printf("Please enter a list of integers (space-separated): ")
+				continue
+			}
+			intSlice = append(intSlice, j)
 		}
-		match := re.Match([]byte(strVal))
-		intVal, err := strconv.Atoi(strVal)
-		if match == false || err != nil {
-			println(GetUserPrompt(RegexNotFound))
-			fmt.Printf(GetUserPrompt(ReadStringValue))
+		fmt.Printf("len(intSlice): %d; cap(intSlice): %d\n", len(intSlice), cap(intSlice))
+		if (len(intSlice) > ListSize) {
+			fmt.Printf("Please enter a maximum of %d integers\n", ListSize)
+			fmt.Printf("Please enter a list of integers (space-separated): ")
 			continue
 		}
-		intSlice = append(intSlice, intVal)
 		BubbleSort(intSlice)
 		fmt.Println(intSlice)
-		fmt.Printf(GetUserPrompt(ReadStringValue))
-		intCount += 1
+		fmt.Printf("Please enter a list of integers (space-separated): ")
 	}
 }
