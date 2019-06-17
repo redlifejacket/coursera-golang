@@ -34,7 +34,7 @@ func init() {
 	bird := new(Animal)
 	snake := new(Animal)
 	animalMap = make(map[string]*Animal)
-	animalMap[animalArray[0]] = cow.InitMe("grass", "walk", "move")
+	animalMap[animalArray[0]] = cow.InitMe("grass", "walk", "moo")
 	animalMap[animalArray[1]] = bird.InitMe("worms", "fly", "peep")
 	animalMap[animalArray[2]] = snake.InitMe("mice", "slither", "hsss")
 }
